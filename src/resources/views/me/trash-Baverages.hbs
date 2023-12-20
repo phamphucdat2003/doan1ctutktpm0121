@@ -1,0 +1,117 @@
+<div class='ml-4'>
+    <div class='row mr-4'>
+        <h1>Baverage Deleted</h1>
+        <div class='ml-auto mt-2'>
+            <a href='/me/stored/baverages'>
+                <svg xmlns='http://www.w3.org/2000/svg' height='30px' viewBox='0 0 448 512'>
+                    <path d='M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5
+              12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7
+              0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5
+              12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z' />
+                </svg>
+            </a>
+        </div>
+    </div>
+    <table class='table mt-4'>
+        <thead>
+             <tr>
+                <th scope='col'>
+                    STT
+                </th>
+                <th scope='col'>
+                    Tên món nước
+                {{{sortable 'name' _sort}}}
+                </th>
+                <th scope='col'>
+                    Giá
+                {{{sortable 'priceSizeM' _sort}}}
+                </th>
+                <th scope='col'></th>
+                <th scope='col'>
+                    Thời gian xóa
+                {{{sortabledaytime 'deletedAt' _sort}}}
+                </th>
+                <th scope='col'></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each baverages}}
+            <tr>
+                <th scope='row'>{{sum @index 1}}</th>
+                <td>{{this.name}}</td>
+                <td>{{this.priceSizeM}}</td>
+                <td><img src='{{this.imgbaverage}}' class='img-avatar' /></td>
+                <td>{{{formatdaytime this.createdAt}}}</td>
+                <td>
+                    <button data-id='{{this._id}}' class='btn btn-primary btn-restore' href=''>Khôi Phục</button>
+                    <button data-id='{{this._id}}' class='btn btn-primary' href='#' data-toggle='modal'
+                        data-target='#delete-baverage-model'>Xóa Vĩnh VIễn</button>
+                </td>
+            </tr>
+            {{else}}
+            <tr>
+                <td colspan='5' class='text-center'>Thùng rác trống
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+{{! //dialog xoa khoa hoc }}
+
+<div id='delete-baverage-model' class='modal' tabindex='-1' role='dialog'>
+    <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title'>Xóa Baverage</h5>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                </button>
+            </div>
+            <div class='modal-body'>
+                <p>Hành động này không thể khôi phục,Bạn có chắc muốn xóa
+                    baverage này?</p>
+            </div>
+            <div class='modal-footer'>
+                <button id='btn-delete-baverage' type='button' class='btn btn-primary'>Xóa vĩnh viễn</button>
+                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{! delete hidden form }}
+
+<form name='delete-baverage-form' method='post'></form>
+<form name='restore-baverage-form' method='post'></form>
+
+<script>
+    //
+    //{{!khi Trang chạy xong thì bắt đầu chạy func}}
+    document.addEventListener("DOMContentLoaded", function () {
+        var deleteform = document.forms['delete-baverage-form'];
+        var restorefrom = document.forms['restore-baverage-form'];
+        var btnDeleteBaverage = document.getElementById('btn-delete-baverage');
+        var baverageId;
+        var restoreBtn = $('.btn-restore');
+        $('#delete-baverage-model').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            baverageId = button.data('id');
+        }) //
+       // {{!onclick vào buttun click thì xóa}}
+        btnDeleteBaverage.onclick = function () {
+            deleteform.action = '/baverages/' + baverageId + '/force?_method=DELETE';
+            deleteform.submit();
+        } 
+        //restore btn
+        restoreBtn.click(function (e) { 
+            //tắt sự kiện mặc định của thẻ <a>
+            e.preventDefault(); 
+            //jquery
+            var baverageId = $(this).data('id');
+            restorefrom.action = '/baverages/' + baverageId + '/restore?_method=PATCH';
+            restorefrom.submit();
+        })
+    })
+
+</script>

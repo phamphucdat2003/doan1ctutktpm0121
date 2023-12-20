@@ -1,0 +1,28 @@
+<div class='mt-4 ml-4'>
+    <h3>
+        Udate Baverage
+    </h3>
+    <form method='post' action='/baverages/{{baverage._id}}?_method=PUT'>
+        <div class='form-group'>
+            <label for='name'>Tên món nước</label>
+            <input type='text' class='form-control' value='{{baverage.name}}' id='name' name='name' required/>
+        </div>
+        <div class='form-group'>
+            <label for='imgbaverage'>Link ảnh món nước </label>
+            <input type='text' class='form-control' value='{{baverage.imgbaverage}}' id='imgbaverage' name='imgbaverage' required/>
+        </div>
+        <div class='form-group'>
+            <label for='priceSizeM'>Giá size M</label>
+            <input type='text' class='form-control' value='{{baverage.priceSizeM}}' id='priceSizeM' name='priceSizeM' required/>
+        </div>
+        <div class='form-group'>
+            <label for='priceSizeL'>Giá size L</label>
+            <input type='text' class='form-control' value='{{baverage.priceSizeL}}' id='priceSizeL' name='priceSizeL' required/>
+        </div>
+         <div class='form-group'>
+            <label for='describe'>Mô tả sản phẩm</label>
+            <input type='text' class='form-control' value='{{baverage.describe}}' id='describe' name='describe' required/>
+        </div>
+        <button type='submit' class='btn btn-primary'>Lưu lại</button>
+    </form>
+</div>

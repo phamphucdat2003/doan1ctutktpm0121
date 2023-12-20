@@ -1,0 +1,102 @@
+<div class='ml-4'>
+    <div class='row mr-4 ml-4'>
+        <h1>Order Details</h1>
+            <div class='ml-auto mt-2'>
+                <a href='/me/finished/orderdetails?_sort&column=_id&type=desc' class="d-inline-flex align-items-center">
+                <i class="fa-regular fa-clock fa-2x"></i>
+                <span class="ml-2">Fulfilled</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <table class='table mt-4'>
+        <thead>
+             <tr>
+                <th scope='col'>
+                    ID
+                {{{sortable '_id' _sort}}}
+                </th>
+                <th scope='col'>
+                    Tên người mua
+                {{{sortable 'name' _sort}}}
+                </th>
+                <th scope='col'>
+                    Chi Tiết
+                </th>
+                <th scope='col'>
+                    Tổng giá mua
+                {{{sortable 'total' _sort}}}
+                </th>
+                <th scope='col'>
+                    Thời gian mua
+                {{{sortabledaytime 'createdAt' _sort}}}
+                </th>
+                <th scope='col'></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each customers}}
+            <tr>
+                <th scope='row'>{{this._id}}</th>
+                <td>{{this.name}}</td>  
+                <td>{{{this.baverage}}}</td>  
+                <td>{{this.total}}</td>
+                <td>{{{formatdaytime this.createdAt}}}</td>
+                <td>
+                    <a class='btn btn-primary' href='#' data-toggle='modal'
+                        data-id='{{this._id}}'
+                        data-target='#delete-customer-model'>Hoàn Thành</a>
+                </td>
+            </tr>
+            {{else}}
+            <tr>
+                <td colspan='5' class='text-center'>Tất cả đơn hàng đã được hoàn thành.<a href='/me/finished/orderdetails?_sort&column=_id&type=desc'>Kiểm tra lịch sử đơn hàng</a>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+
+<div id='delete-customer-model' class='modal' tabindex='-1' role='dialog'>
+    <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title'>Hoàn Thành Đơn</h5>
+                <button type='button' class='close' data-dismiss='modal'
+                    aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                </button>
+            </div>
+            <div class='modal-body'>
+                <p>Bạn có chắc đã hoàn thành đơn này?</p>
+                <p>- kiểm tra ghi chú của khách hàng;</p>
+                <p>- kiểm tra topping;</p>
+                <p>- kiểm tra đúng đơn hàng;</p>
+            </div>
+            <div class='modal-footer'>
+                <button id='btn-delete-customer' type='button'
+                    class='btn btn-primary'>Xác Nhận</button>
+                <button type='button' class='btn btn-secondary'
+                    data-dismiss='modal'>Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+<form name='delete-customer-form' method='post'></form>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var deleteform = document.forms['delete-customer-form'];
+        var btnDeleteCustomer = document.getElementById('btn-delete-customer');
+        var customerid;
+        $('#delete-customer-model').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        customerid = button.data('id');
+        });
+        btnDeleteCustomer.onclick = function () {
+            deleteform.action = '/customers/' + customerid + '?_method=DELETE';
+            deleteform.submit();
+        }
+    });
+</script>

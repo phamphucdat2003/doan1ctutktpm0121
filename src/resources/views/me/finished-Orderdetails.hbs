@@ -1,0 +1,48 @@
+<div class='ml-4'>
+    <div class='row mr-4 ml-4'>
+        <h1>Oder Details Finished</h1>
+        
+    </div>
+    <table class='table mt-4'>
+        <thead>
+             <tr>
+                <th scope='col'>
+                    ID
+                {{{sortable '_id' _sort}}}
+                </th>
+                <th scope='col'>
+                    Tên người mua
+                {{{sortable 'name' _sort}}}
+                </th>
+                <th scope='col'>
+                    Tên món nước
+                {{{sortable 'baverage' _sort}}}
+                </th>
+                <th scope='col'>
+                    Tổng giá mua
+                {{{sortable 'total' _sort}}}
+                </th>
+                <th scope='col'>
+                    Thời gian mua
+                {{{sortabledaytime 'createdAt' _sort}}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each customers}}
+            <tr>
+                <th scope='row'>{{this._id}}</th>
+                <td>{{this.name}}</td>  
+                <td>{{{this.baverage}}}</td>  
+                <td>{{this.total}}</td>
+                <td>{{{formatdaytime this.createdAt}}}</td>
+            </tr>
+            {{else}}
+            <tr>
+                <td colspan='5' class='text-center'>Chưa có ai mua cả
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

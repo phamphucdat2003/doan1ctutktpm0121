@@ -1,0 +1,187 @@
+<form class='ml-4' name="container-form" method='post'
+    action='/baverages/handle-form-actions'>
+    <div class='row mr-4 ml-4'>
+        <h1>Baverage</h1>
+        <div class='ml-auto mt-2'>
+            <a href='/baverages/create'>
+                <svg xmlns='http://www.w3.org/2000/svg' height='30px'
+                    viewBox='0 0 448 512'>
+                    <path
+                        d='M64 80c-8.8 0-16 7.2-16 16V416c0 8.8 7.2 16 16 16H384c8.8 0 16-7.2
+            16-16V96c0-8.8-7.2-16-16-16H64zM0 96C0 60.7 28.7 32 64 32H384c35.3 0 64 28.7 64 64V416c0 35.3-28.7
+            64-64 64H64c-35.3 0-64-28.7-64-64V96zM200 344V280H136c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3
+            10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H248v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z' />
+                </svg>
+            </a>
+            <div style='position: relative;display: inline-block;'>
+                <a href='/me/trash/baverages'>
+                    <svg xmlns='http://www.w3.org/2000/svg' height='30px'
+                        viewBox='0 0 448 512'>
+                        <path
+                            d='M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0
+                32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6
+                17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z' />
+                    </svg>
+                </a>
+                <span class='badge'>{{sub allCount noDeletedCount}}</span>
+            </div>
+        </div>
+    </div>
+    <div class='mt-4 d-flex align-items-center'>
+        <div class='form-check'>
+            <input class='form-check-input' type='checkbox' value
+                id='checkbox-all'/>
+            <label class='form-check-label' for='checkbox-all'>
+                Chọn tất cả
+            </label>
+        </div>
+        <select class='form-control form-control-sm checkbox-select-all-options'
+            name="action" required>
+            <option value>--Hành Động--</option>
+            <option value='delete'>Xóa</option>
+        </select>
+        <button class='btn btn-primary bt-sm check-all-submit-btn' disabled>Áp Dụng</button>
+    </div>
+    <table class='table mt-4'>
+        <thead>
+            <tr><th scope='col'></th>
+                <th scope='col'>
+                    STT
+                </th>
+                <th scope='col'>
+                    Tên món nước
+                {{{sortable 'name' _sort}}}
+                </th>
+                <th scope='col'>
+                    Giá
+                {{{sortable 'priceSizeM' _sort}}}
+                </th>
+                <th scope='col'>
+                </th>
+                <th scope='col'>Mô tả</th>
+                <th scope='col'>
+                    Thời gian tạo
+                {{{sortabledaytime 'createdAt' _sort}}}
+                </th>
+                <th scope='col'></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each baverages}}
+            <tr>
+                <td>
+                    <div class='form-check'>
+                        <input class='form-check-input' type='checkbox'
+                            value='{{this._id}}' name="baverageIds[]" />
+                    </div>
+                </td>
+                <th scope='row'>{{sum @index 1}}</th>
+                <td style='width: 170px;'>{{this.name}}</td>
+                <td>{{this.priceSizeM}}</td>
+                <td><img src='{{this.imgbaverage}}' class='img-avatar' /></td>
+                <td style='width: 500px;'>{{this.describe}}</td>
+                <td>{{{formatdaytime this.createdAt}}}</td>
+                <td>
+                    <a class='btn btn-primary'
+                        href='/baverages/{{this._id}}/edit'>Sửa</a>
+                    <a class='btn btn-primary' href='#' data-toggle='modal'
+                        data-id='{{this._id}}'
+                        data-target='#delete-baverage-model'>Xóa</a>
+                </td>
+            </tr>
+            {{else}}
+            <tr>
+                <td colspan='5' class='text-center'>Bạn chưa tạo baverage nào
+                    <a href='/baverages/create'>Tạo baverage</a>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</form>
+
+{{! //dialog xoa khoa hoc }}
+
+<div id='delete-baverage-model' class='modal' tabindex='-1' role='dialog'>
+    <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title'>Xóa baverage</h5>
+                <button type='button' class='close' data-dismiss='modal'
+                    aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                </button>
+            </div>
+            <div class='modal-body'>
+                <p>Bạn có chắc muốn xóa baverage này?</p>
+            </div>
+            <div class='modal-footer'>
+                <button id='btn-delete-baverage' type='button'
+                    class='btn btn-primary'>Xóa</button>
+                <button type='button' class='btn btn-secondary'
+                    data-dismiss='modal'>Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{! delete hidden form }}
+<form name='delete-baverage-form' method='post'></form>
+
+<script>
+    // khi Trang chạy xong thì bắt đầu chạy func
+    document.addEventListener("DOMContentLoaded", function () {
+        var deleteform = document.forms['delete-baverage-form'];
+        var containerForm = $('form[name="container-form"]');
+        var btnDeleteBaverage = document.getElementById('btn-delete-baverage');
+        var baverageid;
+        var checkboxAll = $('#checkbox-all');
+        var baverageItemCheckbox = $('input[name="baverageIds[]"]');
+        var checkAllSubmitBtn = $('.check-all-submit-btn');
+
+        $('#delete-baverage-model').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            baverageid = button.data('id');
+        })
+        //onclick vào buttun click thì xóa
+        btnDeleteBaverage.onclick = function () {
+            deleteform.action = '/baverages/' + baverageid + '?_method=DELETE';
+            deleteform.submit();
+        }
+        //checkbox all change----------------
+        checkboxAll.change(function () {
+            var isCheckedAll = $(this).prop('checked');
+            baverageItemCheckbox.prop('checked', isCheckedAll)
+            // if (isCheckedAll) {
+            //     baverageItemCheckbox.prop('checked', true)
+            //}
+            //else {
+            //    baverageItemCheckbox.prop('checked', false)
+            //}
+            renderCheckAllSubmitBTn()
+        })
+        //baverage item checkbox----------------
+        baverageItemCheckbox.change(function () {
+            var isCheckedAll = baverageItemCheckbox.length === $('input[name="baverageIds[]"]:checked').length
+            checkboxAll.prop('checked', isCheckedAll);
+            renderCheckAllSubmitBTn()
+        })
+        //check all submit btn clicked
+        //       containerForm.on('submit', function(e) {
+        //           var isSubmitable = checkAllSubmitBtn.hasClass('disabled');
+        //           if (isSubmitable) {
+        //               e.preventDefault();
+        //           }
+        //       })
+        // re-render check all submit button
+        function renderCheckAllSubmitBTn() {
+            var checkedCount = $('input[name="baverageIds[]"]:checked').length;
+            if (checkedCount) {
+                checkAllSubmitBtn.attr('disabled', false)
+            } else {
+                checkAllSubmitBtn.attr('disabled', true)
+            }
+        }
+
+    })
+
+</script>

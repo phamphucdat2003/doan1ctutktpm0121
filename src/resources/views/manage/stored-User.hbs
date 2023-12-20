@@ -1,0 +1,88 @@
+<div class='ml-4'>
+    <div class='row mr-4'>
+        <h1>User Manage</h1>
+    </div>
+    <table class='table mt-4'>
+        <thead>
+             <tr>
+                <th scope='col'>
+                    STT
+                </th>
+                <th scope='col'>
+                    Name
+                {{{sortable 'name' _sort}}}
+                </th>
+                <th scope='col'>
+                    Username
+                {{{sortable 'username' _sort}}}
+                </th>
+                <th scope='col'>
+                    Thời gian tạo
+                {{{sortabledaytime 'createdAt' _sort}}}
+                </th>
+                <th scope='col'></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each users}}
+                {{#if (admin this.username)}}
+                    <tr>
+                        <th scope='row'>{{@index}}</th>
+                        <td>{{this.name}}</td>
+                        <td>{{this.username}}</td>
+                        <td>{{{formatdaytime this.createdAt}}}</td>
+                        <td>
+                            <a class='btn btn-primary' href='/manage/{{this._id}}/edit-User'>Sửa</a>
+                            <button data-id='{{this._id}}' class='btn btn-primary' href='' data-toggle='modal' data-target='#delete-user-model'>Xóa</button>
+                        </td>
+                    </tr>
+                {{/if}}
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+{{! //dialog xóa }}
+
+<div id='delete-user-model' class='modal' tabindex='-1' role='dialog'>
+    <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title'>Xóa User</h5>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                </button>
+            </div>
+            <div class='modal-body'>
+                <p>Hành động này không thể khôi phục,Bạn có chắt muốn xóa User này?</p>
+            </div>
+            <div class='modal-footer'>
+                <button id='btn-delete-user' type='button' class='btn btn-primary'>Xóa vĩnh viễn</button>
+                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{! delete hidden form }}
+
+<form name='delete-user-form' method='post'></form>
+<script>
+    //
+    //{{!khi Trang chạy xong thì bắt đầu chạy func}}
+    document.addEventListener("DOMContentLoaded", function () {
+        var deleteform = document.forms['delete-user-form'];
+        var btnDeleteUser = document.getElementById('btn-delete-user');
+        var userId;
+        var restoreBtn = $('.btn-restore');
+        $('#delete-user-model').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            userId = button.data('id');
+        }) //
+       // {{!onclick vào buttun click thì xóa}}
+        btnDeleteUser.onclick = function () {
+            deleteform.action = '/manage/' + userId + '/force?_method=DELETE';
+            deleteform.submit();
+        } 
+    })
+
+</script>

@@ -1,0 +1,272 @@
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+		  <div class="modal-content">
+			<div class="modal-header">
+			  <h5 class="modal-title" id="exampleModalLabel">Thanh toán</h5>
+			  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			  </button>
+			</div>
+			<div class="modal-body">
+					<form method="post" action="/customers/newcustomer">
+						<div class="form-group mt-2">
+							<label for="name">Name:</label>
+							<input id="name" name="name" style="width: 200px;" type="text" required>
+						</div>
+						<div class="form-group">
+							<label>Số bàn:</label>
+							<input id='numberoftables' name='numberoftables' type="number"style="width: 50px;" required>
+						</div>
+						<div class="form-group mt-2">
+							<label for="baverage">Chi tiết:</label>
+              <div class="border text-dark">
+                <p id="baveragefake" class="ml-2 mt-2"></p>
+              </div>
+							<input class='d-none' id="baverage" name="baverage" style="width: 100%;" type="text" disabled>
+						</div>
+						<div class="form-group mt-2">
+							<label for="total">Tổng</label>
+							<input id="total" name="total" value="0" style="width: 90px;" type="number" disabled> VND
+						</div>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="submit" onclick="submitForm(),calculateSum()" class="btn btn-primary">Xác nhận</button>
+					</form>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-4 position-fixed custom-position">
+      <div class='mr-2 mt-4'>
+          <div class="border border-dark border-2 rounded">
+            <div class="px-4 py-3">
+              <div id="father" class="border border-dark border-2 rounded" style="height:430px;overflow-y: scroll;">
+              </div>
+              <div>
+                  <div class="form-group mt-2">
+                    <label for="totalfake">Tổng</label>
+                    <input id="totalfake" name="totalfake" value="0" style="width: 90px;" type="number"disabled > VND
+                  </div>
+                    <button id="submitButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"disabled>Buy</button>
+                  </div>
+              </div>
+          </div>
+      </div>      
+    </div>
+    <script>
+      const father = document.getElementById("father");
+      function submitForm() {
+        document.getElementById("total").removeAttribute("disabled");
+        document.getElementById("baverage").removeAttribute("disabled");
+      }
+      function calculateSum() {
+        var totalElements = father.getElementsByClassName("total_output");
+        var baverageElements = father.getElementsByClassName("baverage_output");
+        var sizeElements = father.getElementsByClassName("size_output");
+        var quantityElements = father.getElementsByClassName("quantity_output");
+        var noteElements = father.getElementsByClassName("note_output");
+        var outputtotalElement = document.getElementById("total");
+        var outputtotalfakeElement = document.getElementById("totalfake");
+        var outputbaverageElement = document.getElementById("baverage");
+        var outputbaveragefakeElement = document.getElementById("baveragefake");
+        var sum = 0;
+        var string = '';
+        for (var i = 0; i < totalElements.length; i++) {
+          sum += parseInt(totalElements[i].value);
+          string += `${baverageElements[i].innerText}, size: ${sizeElements[i].value}, Số lượng: ${quantityElements[i].value};<br>Note: ${noteElements[i].value}<br>`;
+        }
+        outputbaverageElement.value = string;
+        outputbaveragefakeElement.innerHTML = string;
+        outputtotalElement.value = sum;
+        outputtotalfakeElement.value = sum;
+
+
+        var totalfake = document.getElementById('totalfake');
+        var submitButton = document.getElementById('submitButton');
+        var value = parseInt(totalfake.value);
+        if (value == 0) {
+          submitButton.setAttribute("disabled", "disabled");
+        } else {
+          submitButton.removeAttribute("disabled");
+        };
+
+
+      }
+    </script>
+    <div class="col-8">
+      <div class="row ml-2 mr-2">
+        {{#each baverages}}
+            <div onclick="{{this.slug}}(),calculateSum()" id="baverage{{this.slug}}" class="d-flex flex-fill col mt-4">
+                    <div class="card home-card card-hover shadow">
+                            <div class="home-img__size">
+                            {{!-- css mệt quá nên inline lun --}}
+                              <img src="{{this.imgbaverage}}" style="height:300px; width:300px;" alt="Item Image">
+                            </div>
+                            <div class="card-body">
+                                    <h5 class="card-title">{{this.name}}</h5>
+                                    <p class="card-text">{{this.description}}</p>
+                                    <p class="card-text">Price: {{this.priceSizeM}}VND</p>
+                                    <a href="baverages/{{this.slug}}" class="btn home-btn btn-primary btn-hover">Chi Tiết</a>
+                            </div>
+                    </div>
+            </div>
+            <script>
+              const baverage{{this.slug}} = document.getElementById('baverage{{this.slug}}');
+              function {{this.slug}} () {
+                const div = document.createElement('div');
+                const script = document.createElement('script');
+                script.innerHTML = `
+                      function {{this.slug}}btnClose() {
+                        const div = document.getElementById('{{this.slug}}')
+                        baverage{{this.slug}}.classList.remove('faded-out');
+                        div.remove();
+                        calculateSum()
+                      }
+                      var radioLabels{{this.slug}} = document.querySelectorAll('.Btn_label{{this.slug}} label');
+                      var btnSizeM{{this.slug}} = document.getElementById('btn-sizeM{{this.slug}}');
+                      var btnSizeL{{this.slug}} = document.getElementById('btn-sizeL{{this.slug}}');
+                      var price{{this.slug}} = document.getElementById('price{{this.slug}}');
+                      var outputtotal{{this.slug}} = document.getElementById('total{{this.slug}}');
+                      var quantity{{this.slug}} = document.getElementById('quantity{{this.slug}}');
+                      var size{{this.slug}} = document.getElementById('size{{this.slug}}');
+                      
+                      function total{{this.slug}} () {
+                        var total = quantity{{this.slug}}.value * price{{this.slug}}.value;
+                        outputtotal{{this.slug}}.value = total;
+                        calculateSum()
+                      }
+                      price{{this.slug}}.addEventListener('input',total{{this.slug}}());
+                      quantity{{this.slug}}.addEventListener('input', function(e) {
+                          total{{this.slug}}()
+                          var value = parseInt(quantity{{this.slug}}.value);
+                          if (value < 1) {
+                              quantity{{this.slug}}.value = 1;
+                              outputtotal{{this.slug}}.value = price{{this.slug}}.value;
+                          }
+                          calculateSum()
+                      });
+                      btnSizeM{{this.slug}}.addEventListener('change', function(e) {
+                          if (btnSizeM{{this.slug}}.checked) {
+                              price{{this.slug}}.value = '{{this.priceSizeM}}';
+                              size{{this.slug}}.value= 'M';
+                              total{{this.slug}}()
+                          }
+                          calculateSum()
+                      });
+                      btnSizeL{{this.slug}}.addEventListener('change', function(e) {
+                          if (btnSizeL{{this.slug}}.checked) {
+                              price{{this.slug}}.value = '{{this.priceSizeL}}';
+                              size{{this.slug}}.value= 'L';
+                              total{{this.slug}}()
+                          }
+                          calculateSum()
+                      });
+
+                        radioLabels{{this.slug}}.forEach(function(label) {
+                        label.addEventListener('click', function() {
+                          // Xóa lớp active-Btn khỏi tất cả các nhãn
+                          radioLabels{{this.slug}}.forEach(function(label) {
+                          label.classList.remove('active-Btn');
+                          });
+                          // Thêm lớp active-Btn cho nhãn được chọn
+                          label.classList.add('active-Btn');
+                          calculateSum()
+                      });
+                    });
+                `;
+                div.id = '{{this.slug}}';
+                div.innerHTML = `
+                    <div class="container border border-dark border-2 rounded mt-2 ml-2 mb-2" style="width:98%;">
+                      <p class="baverage_output">{{this.name}}</p>
+                      <div class="row">
+                        <div class="col mt-2 btn-group-toggle Btn_label{{this.slug}}">
+                            <label class="btn btn-secondary active-Btn" for ="btn-sizeM{{this.slug}}">
+                                M
+                                <input id="btn-sizeM{{this.slug}}" type="radio" name="options">
+                            </label>
+                            <label class="btn btn-secondary" for="btn-sizeL{{this.slug}}">
+                                L
+                                <input id="btn-sizeL{{this.slug}}" type="radio" name="options">
+                            </label>
+                        </div>
+                        <div class="col">
+                          <div class="form-group">
+                            <label>Quantity:</label>
+                            <input id='quantity{{this.slug}}' class="quantity_output" type="number"style="width: 50px;" value="1" required>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <div class="form-group">
+                            <label for="price{{this.slug}}">Price:</label>
+                            <input value="{{this.priceSizeM}}" id="price{{this.slug}}" style="width: 70px;" type="number" disabled> VND
+                          </div>
+                        </div>
+                        <div class="col">
+                          <div class="form-group">
+                            <label>Total:</label>
+                            <input class="total_output" value="0" type="number" id="total{{this.slug}}" disabled>
+                          </div>
+                        </div>
+                        <div class="d-none">
+                          <input value="M" name='size' type="text" class="form-control size_output" id="size{{this.slug}}">
+                        </div>
+                         <div class="col">
+                          <div class="form-group">
+                            <label>Note:</label>
+                            <input class="note_output" type="text">
+                          </div>
+                        </div>
+                        <div class="col">
+                          <div class="form-group">
+                             <button onclick="{{this.slug}}btnClose()" class="btn btn-danger">X</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>     
+                `;
+                father.appendChild(div);
+                div.appendChild(script);
+                baverage{{this.slug}}.classList.add('faded-out');
+              }
+            </script>
+        {{else}}
+          <h3 class='mt-2'>Bạn chưa tạo baverage nào:<a href='/baverages/create'>Tạo baverage</a></h3>
+        {{/each}}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div></div>
+<script>
+	var numberoftables = document.getElementById('numberoftables');
+	numberoftables.addEventListener('input', function(e){
+    var value = parseInt(numberoftables.value);
+    if (value < 1) {
+      numberoftables.value = 1;
+    };})
+  var cards = document.querySelectorAll('.home-card');
+  var buttons = document.querySelectorAll('.home-btn');
+  cards.forEach(function(card) {
+    card.addEventListener('mouseover', function() {
+      card.classList.add('hover');
+    });
+    
+    card.addEventListener('mouseout', function() {
+      card.classList.remove('hover');
+    });
+  });
+  
+  buttons.forEach(function(button) {
+    button.addEventListener('mouseover', function() {
+      button.classList.add('hover');
+    });
+    
+    button.addEventListener('mouseout', function() {
+      button.classList.remove('hover');
+    });
+  });
+</script>

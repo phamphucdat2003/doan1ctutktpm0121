@@ -1,0 +1,70 @@
+@import 'variables';
+h1 {
+    color: $color_blue;
+}
+
+.search-form {
+    margin: 10px;
+}
+.img-avatar {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+.badge {
+    position: absolute;
+    top: -10px; /* Điều chỉnh vị trí của số lượng */
+    right: -10px; /* Điều chỉnh vị trí của số lượng */
+    background-color: red; /* Màu nền của số lượng */
+    color: white; /* Màu chữ của số lượng */
+    border-radius: 50%; /* Bo tròn số lượng để tạo hình dạng hình tròn */
+    width: 20px; /* Điều chỉnh kích thước của số lượng */
+    height: 20px; /* Điều chỉnh kích thước của số lượng */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px; /* Điều chỉnh kích thước chữ của số lượng */
+}
+.checkbox-select-all-options {
+    width: 160px;
+    margin: 0 16px;
+}
+.size-300px {
+    width: 400px;
+}
+.active-Btn {
+    box-shadow: 4px 4px 0 #000;
+    transform: translate(-4px, -4px);
+}
+//------------------------------------
+.home-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.home-btn:hover {
+    background-color: #007bff;
+}
+.home-img__size {
+    width: 100%;
+    height: 300px;
+}
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .custom-position {
+    /* Xác định vị trí tùy chọn */
+    left: 65%;
+  }
+  .faded-out {
+    opacity: 0.5; /* Đặt độ mờ của phần tử */
+    pointer-events: none; /* Vô hiệu hóa tương tác với phần tử */
+  }
+  .footerPartials {
+    padding-bottom: 9rem;
+  }
+//-----------login-----------------------------------------------------
+
+//---------------/login-------------------------------------------------
