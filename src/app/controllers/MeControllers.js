@@ -2,6 +2,7 @@
 const Baverage = require('../models/Baverage');
 const { mutipleMongooseToObject } = require('../../util/mongoose');
 const Customer = require('../models/Customer');
+const Message = require('../models/message');
 //----------------------------------------------------------------
 class MeController {
     //  /me/stored/baverages
@@ -91,6 +92,28 @@ class MeController {
             }),
         )
         .catch(next);
+    }
+    communication(req, res, next) {
+        Message.find()
+            .then((messages) => res.render('me/communication',{
+                messages: mutipleMongooseToObject(messages),
+            }))
+            .catch(next);
+    };
+    async communicationpost(req, res, next) {
+        const { name, content } = req.body;
+        try {
+            // Tạo một tin nhắn mới
+            const message = new Message({
+                name,
+                content
+            });
+            await message.save();
+            res.redirect('back');
+        } catch (error) {
+            console.error(error);
+            res.redirect('back');
+        }
     }
 }
 

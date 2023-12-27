@@ -2,7 +2,10 @@
 h1 {
     color: $color_blue;
 }
-
+.header-img{
+    width:50px;
+    height: 50px;
+}
 .search-form {
     margin: 10px;
 }
@@ -65,6 +68,16 @@ h1 {
   .footerPartials {
     padding-bottom: 9rem;
   }
-//-----------login-----------------------------------------------------
 
-//---------------/login-------------------------------------------------
+  ///mess
+  .chat-box {
+      height: 400px;
+      overflow-y: scroll;
+      border: 1px solid #ccc;
+      padding: 10px;
+      background-color: #f4f4f4;
+    }
+    
+
+
+

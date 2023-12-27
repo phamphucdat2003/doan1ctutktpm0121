@@ -1,6 +1,7 @@
 // controllers/authController.js
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
+const Godcat = require('../models/Godcat');
 
 
 
@@ -21,7 +22,7 @@ class authController {
   //[get] /auth/register
   viewregister (req, res) {
       if (req.session.userId) {
-        res.render('auth/register',{title:'Register'});
+        res.render('auth/Onboarding-User',{title:'Register'});
       }else {
         res.redirect('/')
       }
@@ -59,6 +60,8 @@ class authController {
     try {
       // Tìm người dùng trong cơ sở dữ liệu
       const user = await User.findOne({ username });
+      const godcat = await Godcat.findOne();
+
       
       if (!user) {
         req.session.errorName = 'Sai tài khoản. Vui lòng thử lại.';
@@ -75,11 +78,31 @@ class authController {
       // Lưu thông tin người dùng vào phiên làm việc
       req.session.userId = user._id;
       req.session.name = user.name;
-      if (user.username === 'admin123'){
-        req.session.admin123 = true;
-      }else{
-        req.session.admin123 = false;
+      req.session.godcat = godcat.key;
+      req.session.admin = user.admin;
+      res.redirect('/');
+    } catch (error) {
+      res.json({
+        err : error.message
+      });
+    }
+  };
+  //[post] /auth/registergodcat
+  async registergodcat (req, res) {
+  };
+  async godcat (req, res) {
+    const key = req.body.key;
+    try {
+      const godcat = await Godcat.findOne();
+      // So sánh mật khẩu
+      const isKeyCorrect = (key === godcat.key);
+      if (!isKeyCorrect) {
+        req.session.godcaterr = true;
+        return res.redirect('/');
       }
+      // Lưu thông tin người dùng vào phiên làm việc
+      delete req.session.godcaterr;
+      req.session.godcat = true;
       res.redirect('/');
     } catch (error) {
       res.json({

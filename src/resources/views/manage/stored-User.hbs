@@ -1,6 +1,11 @@
 <div class='ml-4'>
     <div class='row mr-4'>
         <h1>User Manage</h1>
+        <div class='ml-auto mt-2'>
+            <a href='/auth/register'>
+                <i class="fa-solid fa-user-plus fa-2x"></i>
+            </a>
+        </div>
     </div>
     <table class='table mt-4'>
         <thead>
@@ -25,9 +30,8 @@
         </thead>
         <tbody>
             {{#each users}}
-                {{#if (admin this.username)}}
                     <tr>
-                        <th scope='row'>{{@index}}</th>
+                        <th scope='row'>{{sum @index 1}}</th>
                         <td>{{this.name}}</td>
                         <td>{{this.username}}</td>
                         <td>{{{formatdaytime this.createdAt}}}</td>
@@ -36,7 +40,6 @@
                             <button data-id='{{this._id}}' class='btn btn-primary' href='' data-toggle='modal' data-target='#delete-user-model'>Xóa</button>
                         </td>
                     </tr>
-                {{/if}}
             {{/each}}
         </tbody>
     </table>

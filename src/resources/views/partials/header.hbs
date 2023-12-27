@@ -7,20 +7,20 @@
         </ul>
         {{#if session.userId}}
         <ul class='navbar-nav ml-auto'>
-            <li class='nav-item dropdown {{#if session.admin123}}mr-5{{/if}}'>
+            <li class='nav-item dropdown {{#if session.admin}}mr-5{{/if}}'>
                 <a class='nav-link dropdown-toggle text-white' id='navbarDropdownMenuLink' data-toggle='dropdown'
                     aria-haspopup='true' aria-expanded='false'>
                     {{session.name}}
                 </a>
                 <div class='dropdown-menu' aria-labelledby='navbarDropdownMenuLink'>
-                    {{#if session.admin123}}
-                        <a class='dropdown-item' href='/auth/register'>register</a>
-                        <a class='dropdown-item' href='/manage'>manage</a>  
-                        <div class='dropdown-divider'></div>                                                       
+                    {{#if session.admin}}
+                        <a class='dropdown-item' href='/manage'>Manage</a>
+                        <a class='dropdown-item' href='/me/stored/baverages'>Baverage</a>
+                        <div class='dropdown-divider'></div>                                                   
                     {{/if}}
-                    <a class='dropdown-item' href='/baverages/create'>Create</a>
-                    <a class='dropdown-item' href='/me/stored/baverages'>Baverage</a>
+                    <a class='dropdown-item' href='/me/communication'>Communication</a>
                     <a class='dropdown-item' href='/me/stored/orderdetails?_sort&column=_id&type=desc'>Order details</a>
+                    
                     <div class='dropdown-divider'></div>
                     <form action="/auth/logout" method='post'><button type='submit' class='dropdown-item'>logout</button></form>
                 </div>

@@ -1,0 +1,35 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="text-center">
+        <h1>Unlocking</h1>
+      </div>
+      <div class="main-content-agile mt-4">
+        <div class="sub-main-w3">
+          <form action="/auth/godcat" method="post"> 
+                <div class="form-group">
+                  <div class="input-group">
+                    <input placeholder="Key" name="key" id="key" class="form-control" type="password" required>
+                    <div class="input-group-append">
+                      <div class="input-group-text">
+                       <i class="fa-solid fa-key"></i>
+                      </div>
+                    </div>
+                  </div>
+                  {{#if session.godcaterr}} 
+                      <p class="text-danger">Sai key!</p>
+                    {{/if}}
+                </div>
+                <div class="form-group">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <div>
+                      <input type="submit" value="Enter" class="btn btn-primary">
+                    </div>
+                  </div>
+                </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
